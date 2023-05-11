@@ -1,0 +1,34 @@
+{
+  "name": "telegram-bot-open-ai",
+  "version": "1.0.0",
+  "description": "my first bot",
+  "type": "module",
+  "main": "./src/index.ts",
+  "scripts": {
+    "start": "node ./src/index.ts",
+    "start-dev": "cross-env NODE_ENV=dev nodemon --watch src -e ts --exec \"npm run lint && ts-node --esm ./src/index.ts\"",
+    "start-dev-no-lint": "cross-env NODE_ENV=dev nodemon --watch src -e ts --exec \"ts-node --esm ./src/index.ts\"",
+    "lint": "eslint **/*.ts"
+  },
+  "author": "artemqa",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/config": "^3.3.0",
+    "@types/node": "^20.1.2",
+    "@typescript-eslint/eslint-plugin": "^5.59.5",
+    "@typescript-eslint/parser": "^5.59.5",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.40.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "nodemon": "^2.0.22",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "config": "^3.3.9",
+    "telegraf": "^4.12.2",
+    "ts-node": "^10.9.1"
+  }
+}
