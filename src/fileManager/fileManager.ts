@@ -1,5 +1,5 @@
 import axios from "axios";
-import {createWriteStream} from "fs";
+import {createWriteStream, existsSync, mkdirSync} from "fs";
 import {unlink} from "fs/promises";
 import {fileURLToPath} from "url";
 import path, {dirname, resolve} from "path";
@@ -8,13 +8,17 @@ import ffmpeg from "fluent-ffmpeg";
 
 // eslint-disable-next-line no-shadow
 const __dirname = dirname(fileURLToPath(import.meta.url));
-
 class FileManager {
   private readonly projectFileFolder = resolve(__dirname, "../", "../assets");
+
+  public aaa = null;
 
   constructor(fileFolderPath?: string) {
     if (fileFolderPath) {
       this.projectFileFolder = fileFolderPath;
+    }
+    if (!existsSync(this.projectFileFolder)) {
+      mkdirSync(this.projectFileFolder);
     }
     ffmpeg.setFfmpegPath(ffmpegPath);
   }
