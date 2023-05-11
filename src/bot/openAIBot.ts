@@ -8,7 +8,6 @@ export class OpenAIBot {
   bot: Telegraf;
   constructor() {
     this.bot = new Telegraf(config.get("TELEGRAM_DEV_KEY"));
-    console.log(fileManager.aaa);
     this.onGetTextMessage();
     this.onGetVoiceMessage();
     this.onStartDialog();

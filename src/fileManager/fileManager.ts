@@ -11,8 +11,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 class FileManager {
   private readonly projectFileFolder = resolve(__dirname, "../", "../assets");
 
-  public aaa = null;
-
   constructor(fileFolderPath?: string) {
     if (fileFolderPath) {
       this.projectFileFolder = fileFolderPath;
