@@ -2,9 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
+      "esnext",
     ],
     "module": "esnext",
     "allowJs": false,
@@ -22,12 +20,10 @@
     "isolatedModules": true,
     "declarationMap": true,
     "noEmitOnError": false,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
     "noEmit": true,
     "sourceMap": true,
-    "allowImportingTsExtensions": true
-
+    "allowImportingTsExtensions": true,
+    "allowUmdGlobalAccess": true
   },
   "include": [
     "src"

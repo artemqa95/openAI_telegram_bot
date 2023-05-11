@@ -179,7 +179,7 @@
       }
     ],
     "capitalized-comments": "off",
-    "class-methods-use-this": "error",
+    "class-methods-use-this": "off",
     "complexity": "off",
     "consistent-return": "off",
     "consistent-this": [
@@ -484,7 +484,7 @@
     "no-with": "error",
     "object-shorthand": [
       "error",
-      "consistent"
+      "always"
     ],
     "one-var": [
       "error",
@@ -539,7 +539,7 @@
       "error",
       "always"
     ],
-    "require-await": "error",
+    "require-await": "off",
     "require-unicode-regexp": "off",
     "require-yield": "error",
     "sort-imports": [
@@ -688,8 +688,7 @@
       {
         "beforeColon": false,
         "afterColon": true,
-        "mode": "strict",
-        "align": "value"
+        "mode": "strict"
       }
     ],
     "keyword-spacing": [

@@ -1,4 +1,4 @@
-import {OpenAIBot} from "./bot/OpenAIBot.ts";
+import {OpenAIBot} from "./bot/openAIBot.ts";
 
 // eslint-disable-next-line
 new OpenAIBot();
