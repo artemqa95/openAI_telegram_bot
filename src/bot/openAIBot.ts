@@ -52,9 +52,9 @@ export class OpenAIBot {
         const fileId = ctx.message.voice.file_id;
         const fileURL = await ctx.telegram.getFileLink(fileId);
         const userId = await ctx.message.from.id.toString();
-        // const localOggPath = await fileManager.saveAudioFile(fileURL.href, userId);
-        // const localMP3Path = await fileManager.convertOggToMp3(localOggPath);
-        // await ctx.telegram.sendMessage(ctx.chat.id, localMP3Path);
+        const localOggPath = await fileManager.saveAudioFile(fileURL.href, userId);
+        const localMP3Path = await fileManager.convertOggToMp3(localOggPath);
+        await ctx.telegram.sendMessage(ctx.chat.id, localMP3Path);
       } catch {
         // eslint-disable-next-line
         console.log('Ошибка обработки аудиосообщения');
