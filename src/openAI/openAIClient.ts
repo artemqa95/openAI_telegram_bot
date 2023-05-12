@@ -1,9 +1,9 @@
 import {createReadStream} from "fs";
 import {Configuration, OpenAIApi} from "openai";
-import {ChatCompletionRequestMessage, EMessageRoleEnum} from "./models.ts";
+import {SessionData} from "./models.ts";
+
 export class OpenAIClient {
   openAIApi: OpenAIApi;
-  messages: Record<string, ChatCompletionRequestMessage[]> = {};
   constructor(authKey: string) {
     const configuration = new Configuration({apiKey: authKey});
     this.openAIApi = new OpenAIApi(configuration);
@@ -22,15 +22,12 @@ export class OpenAIClient {
     }
   }
 
-  async askOpenAI(question: string, userId: string) {
+  async askOpenAI(messages: SessionData["messages"]) {
+    console.log(messages);
     try {
-      if (!this.messages[userId]) {
-        this.messages[userId] = [];
-      }
-      this.messages[userId].push({role: EMessageRoleEnum.User, content: question});
       const response = await this.openAIApi.createChatCompletion({
         model: "gpt-3.5-turbo",
-        messages: this.messages[userId],
+        messages,
       });
 
       return response.data.choices[0].message?.content || "";
