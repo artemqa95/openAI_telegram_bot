@@ -23,7 +23,6 @@ export class OpenAIClient {
   }
 
   async askOpenAI(messages: SessionData["messages"]) {
-    console.log(messages);
     try {
       const response = await this.openAIApi.createChatCompletion({
         model: "gpt-3.5-turbo",
