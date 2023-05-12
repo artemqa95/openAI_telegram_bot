@@ -5,9 +5,9 @@
   "type": "module",
   "main": "./src/index.ts",
   "scripts": {
-    "start": "node ./src/index.ts",
-    "start-dev": "cross-env NODE_ENV=dev nodemon --watch src -e ts --exec \"npm run lint && ts-node --esm ./src/index.ts\"",
-    "start-dev-no-lint": "cross-env NODE_ENV=dev nodemon --watch src -e ts --exec \"ts-node --esm ./src/index.ts\"",
+    "start": "ts-node --esm ./src/index.ts ",
+    "start-dev": "cross-env NODE_ENV=dev nodemon --watch src -e ts --exec \"npm run lint && npm run start\"",
+    "start-dev-no-lint": "cross-env NODE_ENV=dev nodemon --watch src -e ts --exec \"npm run start\"",
     "lint": "eslint **/*.ts"
   },
   "author": "artemqa",
@@ -32,6 +32,7 @@
     "axios": "^1.4.0",
     "config": "^3.3.9",
     "fluent-ffmpeg": "^2.1.2",
+    "openai": "^3.2.1",
     "telegraf": "^4.12.2",
     "ts-node": "^10.9.1"
   }

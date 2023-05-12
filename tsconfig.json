@@ -1,4 +1,9 @@
 {
+  "ts-node": {
+    "compilerOptions": {
+      "module": "esnext"
+    }
+  },
   "compilerOptions": {
     "target": "es5",
     "lib": [
@@ -23,7 +28,7 @@
     "noEmit": true,
     "sourceMap": true,
     "allowImportingTsExtensions": true,
-    "allowUmdGlobalAccess": true
+    "allowUmdGlobalAccess": true,
   },
   "include": [
     "src"

@@ -21,11 +21,11 @@ class FileManager {
     ffmpeg.setFfmpegPath(ffmpegPath);
   }
 
-  async saveAudioFile(url: string, fileName: string): Promise<string> {
+  async saveAudioFile(linkToAudio: string, fileName: string): Promise<string> {
     try {
       const response = await axios({
         method: "GET",
-        url,
+        url: linkToAudio,
         responseType: "stream",
       });
       const oggFilePath = resolve(this.projectFileFolder, `${fileName}.ogg`);
@@ -35,9 +35,9 @@ class FileManager {
       return new Promise((res) => {
         stream.on("finish", () => res(oggFilePath));
       });
-    } catch {
+    } catch (e) {
       // eslint-disable-next-line no-console
-      console.log("Ошибка при создании файла");
+      console.log("Ошибка при создании файла", e);
 
       return "";
     }
@@ -46,9 +46,9 @@ class FileManager {
   async removeFile(fileUrl: string) {
     try {
       await unlink(fileUrl);
-    } catch {
+    } catch (e) {
       // eslint-disable-next-line no-console
-      console.log("Ошибка при удалении файла");
+      console.log("Ошибка при удалении файла", e);
     }
   }
 
@@ -70,9 +70,9 @@ class FileManager {
           })
           .run();
       });
-    } catch {
+    } catch (e) {
       // eslint-disable-next-line no-console
-      console.log("Ошибка конвертации ogg to mp3");
+      console.log("Ошибка конвертации ogg to mp3", e);
 
       return "";
     }
