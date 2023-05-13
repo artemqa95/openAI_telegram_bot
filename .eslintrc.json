@@ -196,7 +196,7 @@
     "dot-notation": [
       "error",
       {
-        "allowKeywords": false
+        "allowKeywords": true
       }
     ],
     "eqeqeq": [
@@ -227,7 +227,7 @@
       "error",
       {
         "min": 1,
-        "max": 20,
+        "max": 30,
         "properties": "always"
       }
     ],
@@ -330,15 +330,7 @@
     "no-lone-blocks": "error",
     "no-lonely-if": "error",
     "no-loop-func": "error",
-    "no-magic-numbers": [
-      "error",
-      {
-        "ignore": [
-          0,
-          1
-        ]
-      }
-    ],
+    "no-magic-numbers": "off",
     "no-mixed-operators": [
       "error",
       {

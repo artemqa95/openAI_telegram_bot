@@ -14,10 +14,11 @@ export interface ChatCompletionRequestMessage {
 }
 
 export interface SessionData {
-  messages: ChatCompletionRequestMessage[]
+  messages: ChatCompletionRequestMessage[],
+  lastMessageDate: number,
 }
 
 export interface IBotContext extends Context {
-  session?: SessionData
   chat: NonNullable<Context["chat"]>
+  from: NonNullable<Context["from"]>
 }
