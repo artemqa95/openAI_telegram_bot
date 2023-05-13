@@ -1,16 +1,17 @@
 {
   "ts-node": {
-    "compilerOptions": {
-      "module": "esnext"
-    }
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
   },
   "compilerOptions": {
     "target": "es5",
     "lib": [
       "esnext",
+      "DOM",
+      "DOM.Iterable"
     ],
     "module": "esnext",
-    "allowJs": false,
+    "allowJs": true,
     "skipLibCheck": false,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -23,21 +24,20 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "declarationMap": true,
-    "noEmitOnError": false,
-    "noEmit": true,
+    "noEmitOnError": true,
+    "emitDeclarationOnly": false,
+    "declaration": false,
     "sourceMap": true,
-    "allowImportingTsExtensions": true,
     "allowUmdGlobalAccess": true,
+    "rootDir": "src",
+    "outDir": "build"
   },
   "include": [
     "src"
   ],
   "exclude":[
     "node_modules",
-    "jspm_packages",
     "application",
-    "system",
     "dist"
   ]
 }

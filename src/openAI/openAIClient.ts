@@ -1,6 +1,6 @@
 import {createReadStream} from "fs";
 import {Configuration, OpenAIApi} from "openai";
-import {SessionData} from "./models.ts";
+import {SessionData} from "./models";
 
 export class OpenAIClient {
   openAIApi: OpenAIApi;
@@ -11,7 +11,7 @@ export class OpenAIClient {
 
   async speechToText(mp3Path: string) {
     try {
-      const response = await this.openAIApi.createTranscription(createReadStream(mp3Path), "whisper-1");
+      const response = await this.openAIApi.createTranscription(createReadStream(mp3Path) as any, "whisper-1");
 
       return response.data.text;
     } catch (e) {

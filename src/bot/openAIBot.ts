@@ -1,9 +1,9 @@
 import {Telegraf} from "telegraf";
 import {message} from "telegraf/filters";
 import {code} from "telegraf/format";
-import {fileManager} from "../fileManager/fileManager.ts";
-import {EMessageRoleEnum, IBotContext, SessionData} from "../openAI/models.ts";
-import {OpenAIClient} from "../openAI/openAIClient.ts";
+import {fileManager} from "../fileManager/fileManager";
+import {EMessageRoleEnum, IBotContext, SessionData} from "../openAI/models";
+import {OpenAIClient} from "../openAI/openAIClient";
 
 export class OpenAIBot {
   telegramBot: Telegraf<IBotContext>;
