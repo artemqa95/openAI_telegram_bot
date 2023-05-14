@@ -16,7 +16,6 @@ export class OpenAIBot {
     this.onGetCommand();
     this.onGetTextMessage();
     this.onGetVoiceMessage();
-    this.onStartDialog();
     this.onExit();
     this.startOpenAIBot();
   }
@@ -50,8 +49,8 @@ export class OpenAIBot {
     const currentMessage = {role, content: msg};
     const currentUserStore = this.usersData.get(mapKey);
     if (currentUserStore) {
-      currentUserStore.messages.push(currentMessage);
       currentUserStore.lastMessageDate = Date.now();
+      currentUserStore.messages.push(currentMessage);
 
       return currentUserStore.messages;
     }
@@ -69,7 +68,12 @@ export class OpenAIBot {
       return this.sendErrorMessage(ctx);
     }
     this.addMessage(currentUserKey, EMessageRoleEnum.Assistant, answerFromOpenAI);
-    await ctx.telegram.sendMessage(ctx.chat.id, answerFromOpenAI);
+    try {
+      // eslint-disable-next-line camelcase
+      await ctx.telegram.sendMessage(ctx.chat.id, answerFromOpenAI, {parse_mode: "Markdown"});
+    } catch {
+      await ctx.telegram.sendMessage(ctx.chat.id, answerFromOpenAI);
+    }
   }
 
   public async startOpenAIBot() {
@@ -83,25 +87,17 @@ export class OpenAIBot {
         this.clearCurrentUserStore(currentUserKey);
         await ctx.reply("Все прошлые вопросы забыты");
       });
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.log("Ошибка при выполнении команды", e);
-    }
-  }
-
-  public onStartDialog() {
-    this.telegramBot.start(async (ctx) => {
-      try {
+      this.telegramBot.hears("/start", async (ctx) => {
         const currentUserKey = this.getKey(ctx);
         this.clearCurrentUserStore(currentUserKey);
         const welcomeText = "Приветствую! \nЗадайте свой вопрос OpenAI в текстовом или аудиоформате";
 
         await ctx.telegram.sendMessage(ctx.chat.id, welcomeText);
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.log("Ошибка инициации чата", e);
-      }
-    });
+      });
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.log("Ошибка при выполнении команды", e);
+    }
   }
 
   private onExit() {

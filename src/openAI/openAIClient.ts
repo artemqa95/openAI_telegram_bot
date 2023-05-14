@@ -11,7 +11,8 @@ export class OpenAIClient {
 
   async speechToText(mp3Path: string) {
     try {
-      const response = await this.openAIApi.createTranscription(createReadStream(mp3Path) as any, "whisper-1");
+      const stream = createReadStream(mp3Path);
+      const response = await this.openAIApi.createTranscription(stream as any, "whisper-1");
 
       return response.data.text;
     } catch (e) {
