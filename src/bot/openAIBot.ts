@@ -4,21 +4,36 @@ import {code} from "telegraf/format";
 import {fileManager} from "../fileManager/fileManager";
 import {EMessageRoleEnum, IBotContext, SessionData} from "../openAI/models";
 import {OpenAIClient} from "../openAI/openAIClient";
+import {parseError} from "../utils";
 
 export class OpenAIBot {
   telegramBot: Telegraf<IBotContext>;
   openAIClient: OpenAIClient;
   usersData: Map<string, SessionData> = new Map();
-  constructor(telegramKey: string, openAIKey: string) {
+  chatIdToSendErrors: string = "";
+  // eslint-disable-next-line no-undef
+  interval: NodeJS.Timer | null = null;
+  constructor(telegramKey: string, openAIKey: string, errorSendingChatId: string) {
     this.telegramBot = new Telegraf<IBotContext>(telegramKey);
     this.openAIClient = new OpenAIClient(openAIKey);
-    this.monitorInactiveUsersData();
-    this.onGetCommand();
-    this.onGetTextMessage();
-    this.onGetVoiceMessage();
-    this.onExit();
-    this.startOpenAIBot();
+    this.chatIdToSendErrors = errorSendingChatId;
+    try {
+      this.monitorInactiveUsersData();
+      this.onGetCommand();
+      this.onGetTextMessage();
+      this.onGetVoiceMessage();
+      this.onExit();
+      this.startOpenAIBot();
+    } catch (e) {
+      this.sendErrorToDeveloper(e);
+      this.monitorInactiveUsersData();
+    }
   }
+
+  private sendErrorToDeveloper = (e: unknown) => {
+    const error = parseError(e, true);
+    this.telegramBot.telegram.sendMessage(this.chatIdToSendErrors, error);
+  };
 
   private getKey(ctx: IBotContext) {
     return `${ctx.chat.id}:${ctx.from.id}`;
@@ -29,20 +44,19 @@ export class OpenAIBot {
   }
 
   private monitorInactiveUsersData() {
-    const period = 60 * 60 * 1000;
-    const timeDifferenceForClear = 4 * 60 * 60 * 1000;
-    setInterval(() => {
+    const hour = 60 * 60 * 1000;
+    const timeDifferenceForClear = 4 * hour;
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
+    this.interval = setInterval(() => {
       const currentDate = Date.now();
       const filteredDataArray = Array.from(this.usersData)
         .filter(([, userData]) => {
           return currentDate - userData.lastMessageDate <= timeDifferenceForClear;
         });
       this.usersData = new Map(filteredDataArray);
-    }, period);
-  }
-
-  public async sendErrorMessage(ctx: {reply: (text: string) => void}) {
-    await ctx.reply("Ошибка! Что-то пошло не так.");
+    }, hour);
   }
 
   public addMessage(mapKey: string, role: EMessageRoleEnum, msg: string) {
@@ -64,8 +78,11 @@ export class OpenAIBot {
     const currentUserKey = this.getKey(ctx);
     const messages = this.addMessage(currentUserKey, EMessageRoleEnum.User, question);
     const answerFromOpenAI = await this.openAIClient.askOpenAI(messages);
-    if (!answerFromOpenAI) {
-      return this.sendErrorMessage(ctx);
+    if (typeof answerFromOpenAI !== "string") {
+      const error = parseError(answerFromOpenAI.error);
+      await ctx.reply("Ошибка! Что-то пошло не так." + "\n" + error);
+
+      return;
     }
     this.addMessage(currentUserKey, EMessageRoleEnum.Assistant, answerFromOpenAI);
     try {
@@ -106,17 +123,17 @@ export class OpenAIBot {
   }
 
   public onGetTextMessage() {
-    try {
-      this.telegramBot.on(message("text"), async (ctx) => {
+    this.telegramBot.on(message("text"), async (ctx) => {
+      try {
         await ctx.reply(code("Ожидаем ответа..."));
         const {text} = ctx.message;
 
         return this.forwardOpenAIAnswer(ctx, text);
-      });
-    } catch (e) {
-      // eslint-disable-next-line
-      console.log('Ошибка обработки текстового сообщения', e);
-    }
+      } catch (e) {
+          // eslint-disable-next-line
+          console.log('Ошибка обработки текстового сообщения', e);
+      }
+    });
   }
 
   public onGetVoiceMessage() {

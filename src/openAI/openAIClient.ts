@@ -26,7 +26,7 @@ export class OpenAIClient {
   async askOpenAI(messages: SessionData["messages"]) {
     try {
       const response = await this.openAIApi.createChatCompletion({
-        model: "gpt-3.5-turbo",
+        model: "gpt-4-1106-preview",
         messages,
       });
 
@@ -35,7 +35,7 @@ export class OpenAIClient {
       // eslint-disable-next-line
       console.log('Ошибка генерации ответа:', e);
 
-      return "";
+      return {error: e};
     }
   }
 }
